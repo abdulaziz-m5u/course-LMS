@@ -22,10 +22,18 @@ class LessonController extends Controller
         }
 
         $lessons = Lesson::whereIn('course_id', Course::ofTeacher()->pluck('id'));
+
         if ($request->input('course_id')) {
             $lessons = $lessons->where('course_id', $request->input('course_id'));
         }
-        $lessons = $lessons->get();
+        if (request('show_deleted') == 1) {
+            if (! Gate::allows('lesson_delete')) {
+                return abort(401);
+            }
+            $lessons = $lessons->onlyTrashed()->get();
+        } else {
+            $lessons = $lessons->get();
+        }
 
         return view('admin.lessons.index', compact('lessons'));
     }
@@ -37,7 +45,13 @@ class LessonController extends Controller
      */
     public function create()
     {
-        $courses = Course::ofTeacher()->get()->pluck('title', 'id')->prepend('Please select', '');
+        if (! Gate::allows('lesson_create')) {
+            return abort(401);
+        }
+        $courses = Course::ofTeacher()
+            ->get()
+            ->pluck('title', 'id')
+            ->prepend('Please select', '');
 
         return view('admin.lessons.create', compact('courses'));
     }
@@ -50,16 +64,14 @@ class LessonController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required'
-        ]);
-
-        $lesson = Lesson::create(
-            $request->all() + 
-            ['position' => Lesson::where('course_id', $request->course_id)->max('position') + 1]
+        if (! Gate::allows('lesson_create')) {
+            return abort(401);
+        }
+        Lesson::create(
+            $request->all() + ['position' => Lesson::where('course_id', $request->course_id)->max('position') + 1]
         );
 
-        return redirect()->route('admin.lessons.index');
+        return redirect()->route('admin.lessons.index',  ['course_id' => $request->course_id]);
     }
 
     /**
@@ -79,9 +91,14 @@ class LessonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Lesson $lesson)
     {
-        //
+        if (! Gate::allows('lesson_edit')) {
+            return abort(401);
+        }
+        $courses = Course::ofTeacher()->get()->pluck('title', 'id')->prepend('Please select', '');
+
+        return view('admin.lessons.edit', compact('lesson', 'courses'));
     }
 
     /**
@@ -91,9 +108,14 @@ class LessonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Lesson $lesson)
     {
-        //
+        if (! Gate::allows('lesson_edit')) {
+            return abort(401);
+        }
+        $lesson->update($request->all());
+
+        return redirect()->route('admin.lessons.index',  ['course_id' => $request->course_id]);
     }
 
     /**
@@ -102,8 +124,41 @@ class LessonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Lesson $lesson)
     {
-        //
+        if (! Gate::allows('lesson_delete')) {
+            return abort(401);
+        }
+        $lesson->delete();
+
+        return redirect()->route('admin.lessons.index');
+    }
+
+    public function restore($id)
+    {
+        if (! Gate::allows('course_delete')) {
+            return abort(401);
+        }
+        $lesson = Lesson::onlyTrashed()->findOrFail($id);
+        $lesson->restore();
+
+        return redirect()->route('admin.courses.index');
+    }
+
+     /**
+     * Permanently delete Course from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function perma_del($id)
+    {
+        if (! Gate::allows('course_delete')) {
+            return abort(401);
+        }
+        $lesson = Lesson::onlyTrashed()->findOrFail($id);
+        $lesson->forceDelete();
+
+        return redirect()->route('admin.courses.index');
     }
 }

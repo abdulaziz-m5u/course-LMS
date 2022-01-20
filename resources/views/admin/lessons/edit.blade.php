@@ -3,22 +3,23 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        Create Lesson
+        Edit Lesson
     </div>
 
     <div class="card-body">
-        <form action="{{ route('admin.lessons.store') }}" method="POST">
+        <form action="{{ route('admin.lessons.update', $lesson->id) }}" method="POST">
             @csrf
+            @method('put')
                 <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label for="course_id">Course*</label>
                     <select name="course_id" class="form-control" id="teacher" >
-                        @foreach($courses as $id => $course)
-                            <option value="{{ $id }}">{{ $course }}</option>
+                        @foreach($courses as $id => $courseName)
+                            <option {{ $id == $lesson->course_id ? "selected" : null }} value="{{ $id }}">{{ $courseName }}</option>
                         @endforeach
                     </select>
-                    @if($errors->has('course_id'))
+                    @if($errors->has('title'))
                         <em class="invalid-feedback">
-                            {{ $errors->first('course_id') }}
+                            {{ $errors->first('title') }}
                         </em>
                     @endif
                 </div>
@@ -42,7 +43,8 @@
             </div>
             <div class="form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
                 <label for="full_text">Full Text*</label>
-                <textarea id="desccription" name="full_text" rows="5" class="form-control" value="{{ old('full_text', isset($lesson) ? $lesson->full_text : '') }}" required>
+                <textarea id="desccription" name="full_text" rows="5" class="form-control" required>
+                    {{ old('full_text', isset($lesson) ? $lesson->full_text : '') }}
                 </textarea>
                 @if($errors->has('slug'))
                     <em class="invalid-feedback">
@@ -52,7 +54,8 @@
             </div>
             <div class="form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
                 <label for="short_text">short Text*</label>
-                <textarea id="desccription" name="short_text" rows="5" class="form-control" value="{{ old('short_text', isset($lesson) ? $lesson->short_text : '') }}" required>
+                <textarea id="desccription" name="short_text" rows="5" class="form-control" required>
+                    {{ old('short_text', isset($lesson) ? $lesson->short_text : '') }}
                 </textarea>
                 @if($errors->has('slug'))
                     <em class="invalid-feedback">
@@ -72,8 +75,8 @@
             <div class="form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
                 <label for="free_lesson">Free Lesson*</label>
                 <select name="free_lesson" class="form-control" id="free_lesson">
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
+                    <option {{ $lesson->free_lesson == 1 ? 'selected' : null }} value="1">Yes</option>
+                    <option {{ $lesson->free_lesson == 0 ? 'selected' : null }} value="0">No</option>
                 </select>
                 @if($errors->has('slug'))
                     <em class="invalid-feedback">
@@ -84,8 +87,8 @@
             <div class="form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
                 <label for="published">Published*</label>
                 <select name="published" class="form-control" id="published">
-                    <option value="1">Active</option>
-                    <option value="0">In Active</option>
+                    <option {{ $lesson->published == 1 ? 'selected' : null }} value="1">Active</option>
+                    <option {{ $lesson->published == 0 ? 'selected' : null }} value="0">In Active</option>
                 </select>
                 @if($errors->has('slug'))
                     <em class="invalid-feedback">

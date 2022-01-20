@@ -32,9 +32,11 @@
                             <th width="10">
                                 #
                             </th>
+                            @if(auth()->user()->isAdmin())
                             <th>
                                 Teacher Name
                             </th>
+                            @endif
                             <th>
                                 Title
                             </th>
@@ -67,11 +69,13 @@
                             <td>
 
                             </td>
+                            @if(auth()->user()->isAdmin())
                             <td>
                                 @foreach ($course->teachers as $singleTeachers)
                                     <span class="badge badge-info">{{ $singleTeachers->name }}</span>
                                 @endforeach
                             </td>
+                            @endif
                             <td>
                                 {{ $course->title ?? '' }}
                             </td>

@@ -10,24 +10,30 @@
                     Dashboard
                 </a>
             </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link {{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}">
-                        <i class="fas fa-gift nav-icon"></i>
-                        Locations
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link {{ request()->is('admin/event-types') || request()->is('admin/event-types/*') ? 'active' : '' }}">
-                        <i class="fas fa-gift  nav-icon"></i>
-                        Event Types
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link {{ request()->is('admin/venues') || request()->is('admin/venues/*') ? 'active' : '' }}">
-                        <i class="fas fa-gift  nav-icon"></i>
-                        Venues
-                    </a>
-                </li>
+            @can('course_access')
+            <li class="nav-item">
+                <a href="{{ route('admin.courses.index') }}" class="nav-link {{ request()->is('admin/courses') || request()->is('admin/courses/*') ? 'active' : '' }}">
+                    <i class="fas fa-gift nav-icon"></i>
+                    Courses
+                </a>
+            </li>
+            @endcan
+            @can('lesson_access')
+            <li class="nav-item">
+                <a href="{{ route('admin.lessons.index') }}" class="nav-link {{ request()->is('admin/lessons') || request()->is('admin/lessons/*') ? 'active' : '' }}">
+                    <i class="fas fa-gift nav-icon"></i>
+                    Lesson
+                </a>
+            </li>
+            @endcan
+            @can('user_access')
+            <li class="nav-item">
+                <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+                    <i class="fas fa-gift nav-icon"></i>
+                    User
+                </a>
+            </li>
+            @endcan
             <li class="nav-item">
                 <a href="" class="nav-link" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <i class="nav-icon fas fa-fw fa-sign-out-alt">
