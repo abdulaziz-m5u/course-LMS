@@ -26,6 +26,22 @@
                 </a>
             </li>
             @endcan
+            @can('test_access')
+            <li class="nav-item">
+                <a href="{{ route('admin.tests.index') }}" class="nav-link {{ request()->is('admin/tests') || request()->is('admin/tests/*') ? 'active' : '' }}">
+                    <i class="fas fa-gift nav-icon"></i>
+                    Test
+                </a>
+            </li>
+            @endcan
+            @can('question_access')
+            <li class="nav-item">
+                <a href="{{ route('admin.questions.index') }}" class="nav-link {{ request()->is('admin/questions') || request()->is('admin/questions/*') ? 'active' : '' }}">
+                    <i class="fas fa-gift nav-icon"></i>
+                    Question
+                </a>
+            </li>
+            @endcan
             @can('user_access')
             <li class="nav-item">
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">

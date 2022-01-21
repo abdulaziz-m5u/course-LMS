@@ -27,6 +27,13 @@ Route::group(['middleware' => ['isAdmin'],'prefix' => 'admin', 'as' => 'admin.']
     Route::resource('lessons', \App\Http\Controllers\Admin\LessonController::class);
     Route::post('lessons_restore/{id}', [\App\Http\Controllers\Admin\LessonController::class,'restore'])->name('lessons.restore');
     Route::delete('lessons_perma_del/{id}', [\App\Http\Controllers\Admin\LessonController::class,'perma_del'])->name('lessons.perma_del');
+    Route::resource('tests', \App\Http\Controllers\Admin\TestController::class);
+    Route::post('tests_restore/{id}', [\App\Http\Controllers\Admin\TestController::class,'restore'])->name('tests.restore');
+    Route::delete('tests_perma_del/{id}', [\App\Http\Controllers\Admin\TestController::class,'perma_del'])->name('tests.perma_del');
+    Route::resource('questions', \App\Http\Controllers\Admin\QuestionController::class);
+    Route::post('questions_restore/{id}', [\App\Http\Controllers\Admin\QuestionController::class,'restore'])->name('questions.restore');
+    Route::delete('questions_perma_del/{id}', [\App\Http\Controllers\Admin\QuestionController::class,'perma_del'])->name('questions.perma_del');
+    Route::resource('question_options', \App\Http\Controllers\Admin\QuestionOptionController::class);
 
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 });
