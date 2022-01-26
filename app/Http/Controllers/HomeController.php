@@ -15,7 +15,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $courses = Course::get();
-        return view('index', compact('courses'));
+        $purchased_courses = NULL;
+        if (auth()->check()) {
+            $purchased_courses = Course::whereHas('students', function($query) {
+                $query->where('users.id', auth()->id());
+            })
+            ->with('lessons')
+            ->orderBy('id', 'desc')
+            ->get();
+        }
+
+        $courses =  Course::where('published', 1)->latest()->get();
+
+        return view('index', compact('courses','purchased_courses'));
     }
 }

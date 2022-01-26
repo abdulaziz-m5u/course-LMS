@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Course extends Model
 {
@@ -45,4 +46,22 @@ class Course extends Model
     {
         return $this->hasMany(Lesson::class)->orderBy('position')->where('published', 1);
     }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'course_student')->withTimestamps()->withPivot(['rating']);;
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class)->orderBy('position');
+    }
+
+    public function getRatingAttribute()
+    {
+        return number_format(DB::table('course_student')->where('course_id', $this->attributes['id'])->average('rating'), 2);
+    }
+
+
 }
+

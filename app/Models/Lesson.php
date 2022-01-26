@@ -14,6 +14,16 @@ class Lesson extends Model
     
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(Course::class);
     }
+
+    public function test() {
+        return $this->hasOne(Test::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class,'lesson_student')->withTimestamps();
+    }
+
 }

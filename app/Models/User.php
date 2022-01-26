@@ -20,7 +20,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'role',
         'password',
     ];
 
@@ -51,6 +50,11 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role()->where('role_id', 1)->first();
+    }
+
+    public function lessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_student');
     }
     
 }
