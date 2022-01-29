@@ -7,6 +7,22 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    public function index(){
+
+        $courses =  Course::where('published', 1)->latest()->get();
+        $purchased_courses = [];
+        if (auth()->check()) {
+            $purchased_courses = Course::whereHas('students', function($query) {
+                $query->where('users.id', auth()->id());
+            })
+            ->with('lessons')
+            ->orderBy('id', 'desc')
+            ->get();
+        }
+
+        return view('courses', compact('courses','purchased_courses'));
+    }
+
     public function show($course_slug)
     {
         $course = Course::where('slug', $course_slug)->with('publishedLessons')->firstOrFail();
@@ -21,7 +37,7 @@ class CourseController extends Controller
 
         $course->students()->attach(auth()->id());
 
-        return redirect()->back()->with('success', 'Payment completed successfully.');
+        return redirect()->route('lessons.show', [$course->id, $request->lesson_id]);
     }
 
     public function rating($course_id, Request $request)

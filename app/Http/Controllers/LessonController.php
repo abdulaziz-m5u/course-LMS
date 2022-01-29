@@ -13,8 +13,9 @@ class LessonController extends Controller
 {
     public function show($course_id, $lesson_slug)
     {
-        $lesson = Lesson::where('slug', $lesson_slug)->where('course_id', $course_id)->firstOrFail();
 
+        $lesson = Lesson::with('test')->where('slug', $lesson_slug)->where('course_id', $course_id)->firstOrFail();
+       
         if (auth()->check())
         {
             if ($lesson->students()->where('user_id', auth()->id())->count() == 0) {

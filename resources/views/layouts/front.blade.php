@@ -1,135 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
+    <!-- ===== BOX ICONS ===== -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
+      rel="stylesheet"
+    />
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <!-- swiper css -->
+    <link rel="stylesheet" href="{{ asset('frontend/assets/libraries/swiper.css') }}" />
 
-    <title>{{ 'Quick LMS' }}</title>
+    <!-- ===== CSS ===== -->
+    <link rel="stylesheet" href="{{ asset('frontend/assets/style.css') }}" />
 
-    <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <title>Responsive Watches website</title>
+  </head>
+  <body>
+    <header class="header" id="header">
+      <div class="nav container">
+        <a href="{{ route('home') }}" class="nav-logo">
+        <i class='bx bx-compass'></i> BERAJAH
+        </a>
 
-    <!-- Custom CSS -->
-    <link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+        <div class="nav-menu" id="nav-menu">
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a href="{{ route('home') }}" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('courses.index') }}" class="nav-link">Course</a>
+            </li>
+            @auth
+              @if(auth()->user()->isAdmin())
+                <li class="nav-item">
+                  <a href="{{ route('admin.courses.index') }}" class="nav-link">Admin</a>
+                </li> 
+              @endif
+            @endauth
+          </ul>
+         @auth
+            <ul class="nav-list nav-account" style="margin-top: 1rem">
+                <li class="nav-item" style="width: 100%; text-align: center">
+                <a
+                    href="{{ route('courses.index') }}"
+                    class="button nav-link"
+                    style="display: block; width: 100%"
+                    >My Course</a
+                >
+                </li>
+                <li class="nav-item" style="width: 100%; text-align: center">
+                <a
+                    href="#"
+                    class="button nav-link"
+                    onclick="getElementById('logout').submit()"
+                    style="display: block; width: 100%"
+                    >Logout</a
+                >
+                <form id="logout" action="{{ route('logout') }}" method="post">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
+         @endauth
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+         @guest 
+         <ul class="nav-list nav-account" style="margin-top: 1rem">
+                <li class="nav-item" style="width: 100%; text-align: center">
+                <a
+                    href="{{ route('login') }}"
+                    class="button nav-link"
+                    style="display: block; width: 100%"
+                    >Login</a
+                >
+                </li>
+                <li class="nav-item" style="width: 100%; text-align: center">
+                <a
+                    href="{{ route('register') }}"
+                    class="button nav-link"
+                    style="display: block; width: 100%"
+                    >Register</a
+                >
+                </li>
+            </ul>
+         @endguest
 
-</head>
-
-<body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/">Quick LMS</a>
-                    </div>
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li>
-                                <a href="#">About</a>
-                            </li>
-                            <li>
-                                <a href="#">Services</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /.navbar-collapse -->
-                </div>
-                <div class="col-lg-6 text-right" style="padding-top: 10px">
-                    @if (Auth::check())
-                        <div style="color:white;display:flex;justify-content: flex-end;">
-                           <h5 class="ml-4"> Logged in as {{ Auth::user()->email }}</h5>
-                            <form style="margin-left: 15px;" action="{{ route('logout') }}" method="post">
-                                @csrf
-                                <input type="submit" value="Logout" class="btn btn-info">
-                            </form>
-                        </div>
-                    @else
-                        <form action="{{ route('login') }}" method="post">
-                            @csrf
-                            <input type="email" name="email" placeholder="Email" />
-                            <input type="password" name="password" placeholder="Password" />
-                            <input type="submit" value="Login" class="btn btn-info">
-                        </form>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-md-3">
-
-                @yield('sidebar')
-
-            </div>
-
-            <div class="col-md-9">
-
-                <div class="row">
-
-                    @yield('main')
-
-                </div>
-
-            </div>
-
+          <div class="nav-close" id="nav-close">
+            <i class="bx bx-x"></i>
+          </div>
         </div>
 
+        <div class="nav-btns">
+          <i class="bx bx-moon change-theme" id="theme-button"></i>
+          @guest
+          <div class="btn-account">
+            <a href="{{ route('login') }}" class="btn btn-login">Login</a>
+            <a href="{{ route('register') }}" class="btn btn-register">Register</a>
+          </div>
+          @endguest
+          @auth
+          <div class="nav-user" id="nav-user">
+            <i class="bx bx-user-circle"></i> <small> {{ auth()->user()->name }} </small>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          @endauth
+
+          <div class="nav-toggle" id="nav-toggle">
+            <i class="bx bx-grid-alt"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dropdown" id="dropdown">
+      <i class="bx bx-x dropdown-close" id="dropdown-close"></i>
+
+      <a href="{{ route('courses.index') }}"><h2 class="dropdown-title-center">My Course</h2></a>
+      <a href="#" onclick="getElementById('logout').submit()"><h2 class="dropdown-title-center">Logout</h2></a>
+      <form id="logout" action="{{ route('logout') }}" method="post">
+          @csrf
+      </form>
     </div>
-    <!-- /.container -->
 
-    <div class="container">
+    <main class="main container">
+     @yield('content')
+    </main>
 
-        <hr>
+    <footer class="footer section">
+      <div class="footer-container container grid">
+        <div class="footer-content">
+          <h3 class="footer-title">Our Information</h3>
+          <ul class="footer-list">
+            <li>123456789</li>
+            <li>Lombok, INDONESIA</li>
+          </ul>
+        </div>
 
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Quick LMS 2017</p>
-                </div>
-            </div>
-        </footer>
+        <div class="footer-content">
+          <h3 class="footer-title">Menu</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="#" class="footer-link">home</a>
+            </li>
+            <li>
+              <a href="#" class="footer-link">course</a>
+            </li>
+            <li>
+              <a href="#" class="footer-link">categories</a>
+            </li>
+          </ul>
+        </div>
 
-    </div>
-    <!-- /.container -->
+        <div class="footer-content">
+          <h3 class="footer-title">Account</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="#" class="footer-link">register</a>
+            </li>
+            <li>
+              <a href="#" class="footer-link">login</a>
+            </li>
+            <li>
+              <a href="#" class="footer-link">faq</a>
+            </li>
+          </ul>
+        </div>
 
-    <!-- jQuery -->
-    <script src="{{ asset('js/jquery.js') }}"></script>
+        <div class="footer-content">
+          <h3 class="footer-title">Social Media</h3>
+          <ul class="footer-social">
+            <a href="#" class="footer-social-link">
+              <i class="bx bxl-facebook"></i>
+            </a>
+            <a href="#" class="footer-social-link">
+              <i class="bx bxl-twitter"></i>
+            </a>
+            <a href="#" class="footer-social-link">
+              <i class="bx bxl-instagram"></i>
+            </a>
+          </ul>
+        </div>
+      </div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+      <span class="footer-copy">&#169; Abdul Aziz. All rights</span>
+    </footer>
 
-</body>
+    <a href="#" class="scroll-up" id="scroll-up">
+      <i class="bx bx-up-arrow-alt scroll-up-icon"></i>
+    </a>
 
+    <!-- swiper -->
+    <script src="{{ asset('frontend/assets/libraries/swiper.js') }}"></script>
+    <!--===== MAIN JS =====-->
+    <script src="{{ asset('frontend/assets/main.js') }}"></script>
+  </body>
 </html>

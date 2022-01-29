@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $purchased_courses = NULL;
+        $purchased_courses = [];
         if (auth()->check()) {
             $purchased_courses = Course::whereHas('students', function($query) {
                 $query->where('users.id', auth()->id());

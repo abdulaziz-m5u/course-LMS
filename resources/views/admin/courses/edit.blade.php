@@ -10,7 +10,7 @@
         <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('put')
-            @if(auth()->user()->isAdmin())
+            @if(!auth()->user()->isAdmin())
                 <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label for="teacher">Teachers*</label>
                     <select name="teachers[]" class="form-control" id="teacher" multiple>

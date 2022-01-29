@@ -45,6 +45,7 @@ Route::group(['middleware' => ['isAdmin'],'prefix' => 'admin', 'as' => 'admin.']
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('courses', [App\Http\Controllers\CourseController::class, 'index'])->name('courses.index');
 Route::get('courses/{slug}', [App\Http\Controllers\CourseController::class, 'show'])->name('courses.show');
 Route::post('courses/payment', [App\Http\Controllers\CourseController::class, 'payment'])->name('courses.payment');
 Route::post('course/{course_id}/rating', [App\Http\Controllers\CourseController::class, 'rating'])->name('courses.rating');

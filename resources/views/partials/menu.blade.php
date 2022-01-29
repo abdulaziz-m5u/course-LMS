@@ -59,13 +59,13 @@
             </li>
             @endcan
             <li class="nav-item">
-                <a href="" class="nav-link" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                <a href="#" onclick="getElementById('logout-form').submit()" class="nav-link">
                     <i class="nav-icon fas fa-fw fa-sign-out-alt">
 
                     </i>
                     Logout
                 </a>
-                <form id="logout-form" action="" method="post">
+                <form id="logout-form" action="{{ route('logout') }}" method="post">
                     @csrf 
                 </form>
             </li>
