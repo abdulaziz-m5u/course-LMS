@@ -44,15 +44,15 @@
           <div class="watch-data-right" id="watch-data-right">
             <ul style="padding-bottom: 5rem;">
             @foreach ($lesson->course->publishedLessons as $publishedLesson)
-                @if ($lesson->free_lesson)
+                @if ($publishedLesson->free_lesson)
                     <li>
                         <a href="{{ route('lessons.show', [$publishedLesson->course_id, $publishedLesson->slug]) }}"><i class="bx bx-play-circle"></i>{{ $publishedLesson->title }}</a>
                     </li>
                 @else
                   @if($purchased_course)
-                  <li>
-                      <a href="{{ route('Lessons.show', [$publishedLesson->course_id, $publishedLesson->slug]) }}"><i class="bx bx-play-circle"></i>{{ $publishedLesson->title }}</a>
-                  </li>
+                    <li>
+                        <a href="{{ route('lessons.show', [$publishedLesson->course_id, $publishedLesson->slug]) }}"><i class="bx bx-play-circle"></i>{{ $publishedLesson->title }}</a>
+                    </li>
                   @endif
                 @endif
             @endforeach
